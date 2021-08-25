@@ -54,25 +54,32 @@ class ModApp(AppBase):
             except Exception as e:
                 return "Exception occured: %s" % e
         else:
-            return "There's no match found"
+            return "Domain doesn't belongs to you"
 
     # extracting emails from owa body.content
-    async def Get_emails(self, Input_data, Regex):   
-        matches = re.findall("mailto\:(.*?)\:", Input_data)
-        if Regex:
-            matches = re.findall(Regex, Input_data)
-        #rgx = r'(?:\.?)([\w\-_+#~!$&\'\.]+(?<!\.)(@|[ ]?\(?[ ]?(at|AT)[ ]?\)?[ ]?)(?<!\.)[\w]+[\w\-\.]*\.[a-zA-Z-]{2,3})(?:[^\w])'
-        #get_first_group = lambda y: list(map(lambda x: x[0], y))
-        #emails = get_first_group(matches)
-        #new_email_lst = []
-        #for l in emails:
-        #    new_email_lst.append(l[1::])    
-        # filter_email = list(set(emails))
-        #emails = re.findall("(?<=mailto:).*?(?=:)", search_term)
-        try:
-            return matches
-        except Exception as e:
-            return "Exception occured: %s" % e
+    async def Get_emails(self, Input_data, Regex):
+        if "mailto:" in Input_data:
+            rgx = r'(?:\.?)([\w\-_+#~!$&\'\.]+(?<!\.)(@|[ ]?\(?[ ]?(at|AT)[ ]?\)?[ ]?)(?<!\.)[\w]+[\w\-\.]*\.[a-zA-Z-]{2,3})(?:[^\w])'
+            matches = re.findall(rgx, Input_data)
+            get_first_group = lambda y: list(map(lambda x: x[0], y))
+            email_list = get_first_group(matches)
+            filter_email_list = []
+            # removing first char containing \n
+            try:
+                for item in email_list:
+                    filter_email_list.append(item[1::])  
+                return filter_email_list
+            except Exception as e:
+                return "Exception occured: %s" % e            
+        else:
+            #emails = re.findall("(?<=mailto:).*?(?=:)", Input_data)
+            email_list = re.findall("mailto\:(.*?)\:", Input_data)
+            if Regex:
+                email_list = re.findall(Regex, Input_data)
+            try:
+                return email_list
+            except Exception as e:
+                return "Exception occured: %s" % e
 
 if __name__ == "__main__":
     asyncio.run(ModApp.run(), debug=True)
