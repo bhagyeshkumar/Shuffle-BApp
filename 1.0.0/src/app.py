@@ -33,7 +33,7 @@ class ModApp(AppBase):
             return "Exception occured: %s" % e
             
     #Cheking existing client matching or not
-    async def Domain_Checker(self, api_key, Imp_domain, existClient, last_days):
+    async def Breach_Checker(self, api_key, Imp_domain, existClient, last_days):
         after_this_date = str(DT.date.today() - DT.timedelta(days=int(last_days)))
         date = after_this_date.replace("-", "")
         domain = str.lower(Imp_domain).strip()
@@ -80,6 +80,27 @@ class ModApp(AppBase):
                 return email_list
             except Exception as e:
                 return "Exception occured: %s" % e
+
+    async def Demo(self, url, Imp_domain, existClient):
+
+        domain = str.lower(Imp_domain).strip()
+        final_email_list = []
+
+        if domain in existClient:        
+            try:
+                response = requests.get(url)
+                if '[]' in response.text:
+                    return "There's no data available for this span of time"
+                else:
+                    values = json.loads(response.text)
+                    for itr in values:
+                        final_email_list.append(itr['eml'])
+
+                    return final_email_list
+            except Exception as e:
+                return "Exception occured: %s" % e
+        else:
+            return "Domain doesn't belongs to you"
 
 if __name__ == "__main__":
     asyncio.run(ModApp.run(), debug=True)

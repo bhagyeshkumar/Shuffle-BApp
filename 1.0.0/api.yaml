@@ -34,8 +34,29 @@ actions:
       required: false
       schema:
         type: string
-  - name: Domain_Checker
-    description: Run check_domain query
+  - name: Demo
+    description: Run Demo query
+    parameters:
+    - name: url
+      description: enter dummy api for testing
+      example: "example.com"
+      required: true
+      schema:
+        type: string
+    - name: Imp_domain
+      description: enter domain you received in mail
+      example: "example.com"
+      required: true
+      schema:
+        type: string
+    - name: existClient
+      description: Provide existing client in list
+      example: "['abc.com','xyz.com','example.com']"
+      required: true
+      schema:
+        type: string
+  - name: Breach_Checker
+    description: Check Domain and call BS
     parameters:
     - name: Imp_domain
       description: enter domain you received in mail
