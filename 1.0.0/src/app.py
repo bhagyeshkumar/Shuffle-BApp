@@ -58,7 +58,7 @@ class ModApp(AppBase):
 
     # extracting emails from owa body.content
     async def Get_emails(self, Input_data, Regex):
-        if "mailto:" in Input_data:
+        if "mailto:" not in Input_data:
             rgx = r'(?:\.?)([\w\-_+#~!$&\'\.]+(?<!\.)(@|[ ]?\(?[ ]?(at|AT)[ ]?\)?[ ]?)(?<!\.)[\w]+[\w\-\.]*\.[a-zA-Z-]{2,3})(?:[^\w])'
             matches = re.findall(rgx, Input_data)
             get_first_group = lambda y: list(map(lambda x: x[0], y))
